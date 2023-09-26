@@ -1,0 +1,3 @@
+inlet fluid__2 
+wall fluid__0 fluid__2 
+outlet fluid__1 fluid__3 

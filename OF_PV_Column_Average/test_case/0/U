@@ -1,0 +1,68 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    /*inlet
+    {
+     //    type            inletOutlet; //fixedValue;
+     //    inletValue	uniform (15 0 0);
+	   	// value           uniform (15 0 0);
+
+    	type        flowRateInletVelocity;
+        volumetricFlowRate   630.9; // cm3/s
+        value       uniform (0 0 0); // placeholder
+    }*/
+
+inlet
+         {
+               type groovyBC;
+               value uniform (0 0 0);
+               variables (
+                 "n=6.6;"  //power law coefficient n
+                 "d=0.0127;"  //pipe diameter
+               //  "volFlowRate=0.00229729;"  //volumetric flow rate
+               //  "Umean=volFlowRate/(pi*pow((d/2),2));"   //calculate mean velocity
+                 "Umean=4.9804;"   //calculate mean velocity
+                 "Umax=Umean*(((n+1)*(2*n+1))/(2*pow(n,2)));"  //calculate max velocity
+                "profile=Umax*pow(1-sqrt(pow(pos().y-0.1,2)+pow(pos().z-0.1,2))/(d/2),(1/n));"
+                 //calcucate power law velocity profile Umax*(1-r/R)^(1/n)
+                 );
+               valueExpression "normal()*-profile";
+               //apply to boundary, normal() is surface normal vector and minus is needed for inflow
+         }
+
+    outlet 
+    {
+	type	pressureInletOutletVelocity;
+	value	uniform (0 0 0);
+    }
+
+
+    wall
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+}
+
+
+// ************************************************************************* //
