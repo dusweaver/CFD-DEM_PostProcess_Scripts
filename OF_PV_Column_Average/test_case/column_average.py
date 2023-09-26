@@ -42,6 +42,9 @@ for time_step in time_directories:
     contour1.ContourBy = ["POINTS", contour_field]
     contour1.Isosurfaces = [contour_value]
 
+    save_data_name = case_directory + '/contour.vtm'
+    SaveData(save_data_name,proxy=contour1, PointDataArrays=['U', 'UMean', 'Us', 'UsMean'])
+
     #convert to int
     conv_int = 1000
     # Loop through the desired x-coordinates

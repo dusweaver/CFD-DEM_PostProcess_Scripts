@@ -1,1 +1,7 @@
-outputs average values of a field along one direction (default is x-direction)
+outputs average values of a field along one direction (default is x-direction
+
+required packages:
+
+python3
+paraview (for pvpython)
+
